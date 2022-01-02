@@ -155,29 +155,41 @@
                 </group>
                 <div id="map_tree" style="width:100%; height:350px;"> MAPA</div>
                 <script>
+                	
                     odoo.define('gpsmap_geofence', function (require) {                        
                         var gpsmap_class        = require('gpsmap');                        
-                        var gps                 = new gpsmap_class();
+                        var gps                 = new gpsmap_class();  
                         gps.map("map_tree");
-
+                        
+                        
+                        
+                                              
+                        
+						//gps.show_poligono(gps.map.center);
+                        
+                        
                         
                         if($("textarea[name='area']").length>0)
                         {
-                            gps.poligon(gps.map.center);                            
+                        	console.log("EDITAR GEOCERCA");
+                            //gps.poligon(gps.map.center);                            
                             google.maps.event.addListener(gps.map, 'dblclick', function(event) 
                             { 		                             	                          	
 	                        	gps.poligon(event.latLng);	                          		                         
                             });                            
                         }
+                        /*
                         else if($("span.points[name='area']").length>0)
                         {
                         	console.log("VER GEOCERCA");
-                        	console.log($("span.points[name='area']").html());
+                        	//console.log($("span.points[name='area']").html());
                         	
                             var flightPlanCoordinates=gps.array_points($("span.points[name='area']").html());                             
                             gps.show_poligono(flightPlanCoordinates,{color:$("span[name='color']").html(),geofence:$("span[name='name']").html()});	                            
-                        }    
-                    });                
+                        }
+                        */    
+                    }); 
+                                   
                 </script>
             </form>
         </field>

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-import datetime, time
+import datetime, time, string
 import requests, json
 import random
 import base64
@@ -163,22 +163,34 @@ class vehicle(models.Model):
             print("ALERTA ", alert["name"])        
             devices         =alert["device_ids"]
             geofences       =alert["geofence_ids"]
-            for device in devices:
-                dev_id          =device["id"]
-                #if(device["id"]==position["fv_id"]):
-                #    print("VEHICULO VERIFICADO", device["name"])                   
-
             polygons = []
             for geofence in geofences:
                 area        =geofence["area"]                
                 print("GEOFENCE", geofence["name"])
                 str_area    =area[9:len(area)-2]
                 print("AREA2 ", str_area)
-                #coordinates = string.split(str_area, ',')
+                coordinates = str.split(str_area, ', ')
                 polygon = []
-                #for coordinate in coordinates:
-                #    polygon.append(coordinate)
-                #polygons.append([polygon])
+                for coordinate in coordinates:
+                    polygon.append(coordinate)                
+                geofence.polygon=polygon                    
+                polygons.append(geofence)
+
+
+            data_devices	=[]
+            data_device		=[]
+            for device in devices:
+                
+            
+            	print(device.name)
+            	#data_device.device		=device
+            	#data_device.geofences	=polygons
+            	
+            	#data_devices.append(data_device)
+                #dev_id          =device["id"]
+                #if(device["id"]==position["fv_id"]):
+                #    print("VEHICULO VERIFICADO", device["name"])                   
+
         
                 
         #geofence_ids = fields.Many2many('tc_geofences', 'alert_geofence', 'geofence_id', 'alert_id', string='Geofence')
@@ -225,7 +237,8 @@ class vehicle(models.Model):
             else:
                 if(float(position["fv_speed"]) < float(position["speed_compu"])):
                     print("Exceso de velocidad")
-
+                for data_device in data_devices:
+                    print("data_device", data_device)
                 
             
             position["de"]            =position["tp_deviceid"]                            
@@ -405,7 +418,7 @@ class tc_geofences(models.Model):
             return 'OUT'
 
     def pointStringToCoordinates(self, point):
-        coordinates = string.split(point, ' ')
+        coordinates = str.split(point, ' ')
         coordinate = {}
         coordinate['x'] = coordinates[0]
         coordinate['y'] = coordinates[1]

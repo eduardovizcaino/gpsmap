@@ -1,3 +1,5 @@
+globalThis.object_gpsmap;
+
 odoo.define('gpsmap', function (require) {
     "use strict";
     var AbstractAction  		=require('web.AbstractAction');
@@ -12,19 +14,20 @@ odoo.define('gpsmap', function (require) {
     var vehicle_data			=new Array();
 //    var locationsMarker 		=new Array();
     var localizacion_anterior;
-    var self;
+//	object_gpsmap;    
     var coordinate_active		=undefined;
     var simulation_action		="stop";
     var isimulacion				=1;
     var simulation_stop			=0;
     var simulation_time			=100;
-    var Polygon;
+    var geofence;
     
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////    
 
     var class_gpsmap = AbstractAction.extend({
+    	
         willStart: function () {
             //console.log("class_gpsmap.willStart");
             this.locationsMarker 		=new Array();              
@@ -32,26 +35,16 @@ odoo.define('gpsmap', function (require) {
 			this.GeoMarker1				=Array();
 			this.lineas					=Array();	
 			this.Polyline				=undefined;
-            
+			this.time					=0;            
             this.map;            
             this.device_active=0;
-            self = this;            
+                        
             
             var data={
                 method: 'search_read',
                 context: session.user_context,
             };
-            /*
-            data["model"]="tc_geofences";
-            
-        
-        
-            this._rpc(data).then(function(res)   {  
-                console.log("########### RPC GEOFENCES ###############");
-                self.geofences     =res;      
-                console.log(self.geofences);
-            });
-            */
+            self = this;
                         
             data["model"]="fleet.vehicle";            
             var def= this._rpc(data)
@@ -63,6 +56,7 @@ odoo.define('gpsmap', function (require) {
                     
             return this._super.apply(this, arguments);
         },        
+        /*
         datas_rpc: function(data, model)
         {	    	
             data["model"]=model;
@@ -71,7 +65,8 @@ odoo.define('gpsmap', function (require) {
                 console.log(res);
                 return res;                
             });
-        },        
+        },
+        */        
         ////////////////////////////////////////////////
 
         events: {
@@ -90,14 +85,14 @@ odoo.define('gpsmap', function (require) {
                 {
                     this.status_device($("[vehicle='" + this.device_active + "']"));                                
                 }
-                self = this;
+                //self = this;
             },
             'click button#action_play': function (e) {
 	            if(local.positions.length>0)
 		        {
 		            simulation_action="play";
 		            this.del_locations();
-		            self = this;            
+		            //self = this;            
 		            $("div#odometro").show();
 			        this.paint_history(isimulacion);
 		        } 			       					
@@ -139,10 +134,12 @@ odoo.define('gpsmap', function (require) {
                 });
                 return;
             }          
+            /*
 			this.GeoMarker				=Array();
 			this.GeoMarker1				=Array();     
 			this.lineas					=Array();	      
             this.locationsMarker 		=new Array();              
+            */
             this.map();
             this.status_device();
             this.position();
@@ -247,11 +244,11 @@ odoo.define('gpsmap', function (require) {
             setTimeout(function()
             { 
             */ 
-                if(argument==undefined)                 self.positions(argument);
+                if(argument==undefined)                 this.positions(argument);
                 else if($("#data_tablero").length==0)   
                 {
                     //console.log("tablero");
-                    selfs.position(argument);         
+                    this.position(argument);         
                 }    
             /*    
             },100);
@@ -259,25 +256,25 @@ odoo.define('gpsmap', function (require) {
         },
         ////////////////////////////////////////////////
         positions: function(argument) {
-            var time=1000;  	    
-
+			if(self.time==0)		self.time=7000;
+			else if(self.time==7000)	this.time=14000;
+			
             if(this.gpsmap_section!="gpsmaps_maphistory" && $("div#maponline").length>0)
-            { 
-                //console.log("POSITIONS ====== lalo =");
-                time=15000;        
+            {            	 
                 this.positions_search(argument);         
             }
             if(typeof argument!="number")
             {
+            	console.log("tablero"+self.time);
                 setTimeout(function()
                 {            
                     self.positions(argument);
-                },time);
+                },self.time);
             }
         },    
         ////////////////////////////////////////////////
         positions_search:function(argument){
-            //console.log("class_gpsmap.positions_search");
+            console.log("positions_search");
             var fields_select   =['deviceid','devicetime','latitude','longitude','speed_compu','attributes','address','event','status','course','phone'];
             var vehiculo_id;
             var vehiculos       =local.vehicles;
@@ -383,7 +380,7 @@ odoo.define('gpsmap', function (require) {
         positions_paint:function(argument)
         {       
         
-            //console.log("class_gpsmap.positions_paint");
+            console.log("positions_paint");
             var ipositions;
             var iposition;
             if(local.positions.length>0)
@@ -442,6 +439,7 @@ odoo.define('gpsmap', function (require) {
                     }                    
                 }
             }
+            else  console.log("SIN POSITIONES");
         },
         fn_localizaciones: function(position, vehiculo)
         {
@@ -515,7 +513,7 @@ odoo.define('gpsmap', function (require) {
 				    if(vehicle["sp"]<5 && vehicle["ty"]=="Online")	        icon_status="stop.png";
 				    if(vehicle["sp"]>5 && vehicle["ty"]=="Online")	        icon_status="car_signal1.png";
 				    
-				    console.log("function locationsMap" + vehicle);    
+				    //console.log("function locationsMap" + vehicle);    
 				    if(icon_status!="")
 				    {				
 				    	
@@ -977,7 +975,7 @@ odoo.define('gpsmap', function (require) {
 		}, 					
 	    show_poligono: function (LocationsLine,option) 
 	    {	
-	        console.log("###########SHOW POLYGON###############");           
+	        //console.log("###########SHOW POLYGON###############");           
 		    if(option==undefined)			option={};
 		    if(option.color==undefined)		option.color="#FF0000";		
 		    if(option.color=="") 			option.color="#FF0000";
@@ -985,15 +983,17 @@ odoo.define('gpsmap', function (require) {
 		    if(option.opacity==undefined)	option.opacity=0.8;		
 		    if(option.opacity=="") 			option.opacity=0.8;
 
-		    this.Polygon = new google.maps.Polygon({
+
+			this.geofence 	= new google.maps.Polygon({
 			    paths:          LocationsLine,
-			    map:            self.map,
+			    map:            this.map,
 			    strokeColor:    option.color,
 			    strokeOpacity:  option.color,
 			    strokeWeight:   2,
 			    fillColor:      option.color,
 			    fillOpacity:    0.35
-		    });	
+		    });
+
 
 		    if(option.geofence!=undefined)
 		    {
@@ -1024,20 +1024,23 @@ odoo.define('gpsmap', function (require) {
 			    var mapLabel = new MapLabel({
 				    text: 			option.geofence,
 				    position: 		posicion,
-				    map: 			self.map,
+				    map: 			this.map,
 				    fontSize: 		14,
 				    fontColor:		"#000000",
 				    align: 			"center",
 				    strokeWeight:	5,
 			    });
 		    }			
-		    //Polygon.setMap(map);
+		  
 	    }, 	   
 		poligon: function (elocation,color)
 		{	
-		    if (typeof this.Polygon === 'object')
+			console.log("poligon");
+			
+		    if (typeof this.geofence === 'object')
 			{
-			    this.Polygon.setMap(null);
+				console.log("FUNCION POLIGON :: es objeto, limpia mapa objeto");
+			    this.geofence.setMap(null);
 			}			
 			{
 				//this.map.setZoom(16);
@@ -1049,7 +1052,7 @@ odoo.define('gpsmap', function (require) {
 					new google.maps.LatLng(parseFloat(elocation.lat()-0.01), parseFloat(elocation.lng()+0.01))
 				];	
 				
-				this.Polygon = new google.maps.Polygon({
+				this.geofence.setOptions({
 					paths:          triangleCoords,
 					draggable:      true, // turn off if it gets annoying
 					editable:       true,
@@ -1058,30 +1061,63 @@ odoo.define('gpsmap', function (require) {
 					strokeWeight:   2,
 					fillColor:      '#FF0000',
 					fillOpacity:    0.35,
-					map:	        this.map
+					map:	        this.map		    	
 				});
-				self = this;
+				
+				//self = this;
 			}
-			google.maps.event.addListener(this.Polygon.getPath(), "set_at", this.getPolygonCoords);
-			google.maps.event.addListener(this.Polygon.getPath(), "insert_at", this.getPolygonCoords);			
-		}, 					
-        getPolygonCoords: function () 
+			//console.log("poligon=" + typeof this.geofence);
+			if (typeof this.geofence === 'object')
+			{
+				globalThis.object_gpsmap = this;
+				console.log("FUNCION POLIGON :: eventos");
+				google.maps.event.addListener(globalThis.object_gpsmap.geofence.getPath(), "set_at", globalThis.object_gpsmap.getPolygonCoords);
+				google.maps.event.addListener(globalThis.object_gpsmap.geofence.getPath(), "insert_at", globalThis.object_gpsmap.getPolygonCoords);			
+			}
+		}, 	
+						
+        foreach: function(objeto) 
         {
-		    if (typeof this.Polygon === 'object')
+        	if (typeof objeto === 'object')
+        	{        
+        		var objeto_name=objeto.constructor.name;
+				for (var index in objeto) 
+				{	
+					console.log(typeof objeto[index] + " " + objeto_name + "[" + index + "]");
+								
+					if (objeto.hasOwnProperty(index)) 
+					{							
+						console.log(objeto_name+ "[" + index + "]=" + objeto[index]);
+					}					
+					if (typeof objeto === 'object')
+					{					
+						this.foreach(objeto[index]);		
+					}		
+					
+				} 
+			}       	        	
+		},
+					
+        getPolygonCoords: function() 
+        {
+        	console.log("getgeofenceCoords=" + globalThis.object_gpsmap.geofence.getPath());
+		    //if (typeof this.geofence === 'object')
 			{
                 var puntos  = "";
                 var punto;                        
-                var len     = self.Polygon.getPath().getLength();
+                var len     = globalThis.object_gpsmap.geofence.getPath().getLength();
                 
+            	globalThis.object_gpsmap.foreach(globalThis.object_gpsmap.geofence.getPath().sd);    
                 for (var i = 0; i < len; i++) 
-                {
-                    var punto   =self.Polygon.getPath().td[i];
+                {                	
+                    var punto   =globalThis.object_gpsmap.geofence.getPath().sd[i];
 			        if(puntos=="")  puntos  =punto.lat()+" "+punto.lng();
 			        else            puntos  +=", "+punto.lat()+" "+punto.lng();
                 }
-                punto=self.Polygon.getPath().td[0];
+                punto=globalThis.object_gpsmap.geofence.getPath().sd[0];
                 puntos+=", "+punto.lat()+" "+punto.lng();
 
+				//console.log(puntos);
         		puntos="POLYGON(("+puntos+"))";
         		$("textarea[name='area']")
         		    .val(puntos)
@@ -1091,42 +1127,38 @@ odoo.define('gpsmap', function (require) {
         },
         async geofences_paint()
         {
-            console.log("########### GEOFENCES PAINT ###############");
+            //console.log("########### GEOFENCES PAINT ###############");
             
             var data={
                 model:  "tc_geofences",
                 method: "search_read",
                 context: session.user_context,
             };
-            self.geofences= this._rpc(data).then(function(res)   {  
+            
+            this.geofences= this._rpc(data).then(function(res)   {  
                 var igeofences;
                 for(igeofences in res)
                 {		                
                     var geofence                    =res[igeofences];		                               
-                    console.log(geofence);
                     var geofence_id                 =geofence["area"];
-                    console.log("geofence[hidden]" + geofence["hidden"]);    
                     
                     if(geofence["hidden"]==false && geofence["area"]!=false)
-                    {                        
-                        console.log("geofence[area]" + geofence["area"]);
-                            
+                    {                                                    
                         var flightPlanCoordinates=self.array_points(geofence["area"]);                             
                         self.show_poligono(flightPlanCoordinates,{color:geofence["color"],geofence:geofence["name"]});	
                     } 
-                       
                 }
             });            
         },        
 	    array_points: function (points) 
 	    {
 	        var i_vec_points;
-	        console.log("###########ARRAY POINTS###############");
+	        //console.log("###########ARRAY POINTS###############");
 	        var array_points    =new Array();
             points              =points.substring(9, points.length - 2);   // Returns "ell" 	    
             var vec_points      =points.split(", ");
             
-            console.log(vec_points);
+            //console.log(vec_points);
             for(i_vec_points in vec_points)
             {                   
                 var point       =vec_points[i_vec_points];
@@ -1165,17 +1197,24 @@ odoo.define('gpsmap', function (require) {
 	        this.geocoder 		   				= new google.maps.Geocoder();      
 	        var trafficLayer 					= new google.maps.TrafficLayer();						
   			trafficLayer.setMap(this.map);
+  			
+  			
+  			this.geofence 							= new google.maps.Polygon();
+  			console.log("GENERA OBJETO GEOCERCA " + this.geofence);
+  			
   					    
-	        this.gMEvent                         	= google.maps.event;			        			        			        
+	        this.gMEvent                         	= google.maps.event;	
+	        //object_gpsmap=this;		        			        			        
         },
         ////////////////////////////////////////////////
         async map(object) {        
+        	/*
             this.locationsMarker 		=new Array();
 			this.GeoMarker				=Array();
 			this.GeoMarker1				=Array();        
 			this.lineas					=Array();	  
-			this.Polygon;      
-            
+			this.geofence;      
+            */
             if(object==undefined)   object="maponline";
             
             //console.log("class_gpsmap.map :: " + object);
@@ -1214,6 +1253,7 @@ odoo.define('gpsmap', function (require) {
         willStart: function () {
             var retornar=this._super.apply(this, arguments);
             this.geofences_paint();
+            this.positions();
             //console.log("maponline.willStart");            
             return retornar;
         },
@@ -1227,6 +1267,7 @@ odoo.define('gpsmap', function (require) {
         willStart: function () {
             var retornar=this._super.apply(this, arguments);
             this.geofences_paint();
+            this.positions();
             //console.log("maponline.willStart");            
             return retornar;
         },
