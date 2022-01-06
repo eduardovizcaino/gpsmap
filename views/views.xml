@@ -78,7 +78,7 @@
         <field name="model">tc_positions</field>
         <field name="arch" type="xml">
             <tree string="Models">
-                <field name="deviceid"/>
+                
                 <field name="protocol"/>
                 <field name="speed"/>
                 <field name="altitude"/>
