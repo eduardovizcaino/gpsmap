@@ -36,6 +36,8 @@ Main Features
         'security/ir.model.access.csv',
         #'views/solesgpsmap_website.xml',
         'views/views.xml',
+        'views/tc_devices.xml',
+        'views/tc_geofences.xml',
         'views/menuitem.xml',
     ],
     'demo': ['data/demo.xml'],

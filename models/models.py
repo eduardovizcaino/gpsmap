@@ -74,7 +74,28 @@ class tc_devices(models.Model):
     signal                                      = fields.Boolean('Good signal', default=True)
     company_ids                                 = fields.Many2many('res.company', 'tcdevices_res_company_rel', 'user_id', 'cid', string='Companies', default=lambda self: self.env.user.company_id)
     
+    """
+class tc_positions(models.Model):
+    _name = "tc_positions"
+    _description = 'traccar positions'
+    _order = "devicetime DESC"
+        
+    protocol                                    = fields.Char('Protocolo', size=15)
+    deviceid                                    = fields.Many2one('tc_devices',ondelete='set null', string="Vehiculo", index=True)
+    servertime                                  = fields.Datetime('Server Time')
+    devicetime                                  = fields.Datetime('Device Time')
+    fixtime                                     = fields.Datetime('Error Time')
+    valid                                       = fields.Integer('Valido')
+    latitude                                    = fields.Float('Latitud',digits=(5,10))
+    longitude                                   = fields.Float('Longitud',digits=(5,10))
+    altitude                                    = fields.Float('Altura',digits=(6,2))
+    speed                                       = fields.Float('Velocidad',digits=(3,2))
+    course                                      = fields.Float('Curso',digits=(3,2))
+    address                                     = fields.Char('Calle', size=150)
+    attributes                                  = fields.Char('Atributos', size=5000)
+    status                                      = fields.Char('Type', size=5000)
 
+    """
 class vehicle(models.Model):
     _inherit = "fleet.vehicle"
     image_vehicle = fields.Selection([

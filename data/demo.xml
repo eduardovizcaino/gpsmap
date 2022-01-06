@@ -24,7 +24,7 @@
           <field name="image_vehicle">01</field>
       </record>
       
-
+<!--
       <record id="position_1_1" model="gpsmap.positions">
           <field name="protocol">tk103</field>             
           <field name="deviceid" ref="fleet.vehicle_1" />          
@@ -116,7 +116,7 @@
           <field name="other">0</field>
           <field name="leido">0</field>          
       </record>
-
+-->
 <!--
       <record id="base.user_demo" model="res.users">
         <field name="groups_id" eval="[(4, ref('fleet.fleet_group_manager'))]" />
