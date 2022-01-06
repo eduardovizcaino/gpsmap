@@ -73,7 +73,6 @@
 
 
     <!-- POSITIONS -->
-    <!--
     <record id='tc_positions_view_tree' model='ir.ui.view'>
         <field name="name">tc_positions.tree</field>
         <field name="model">tc_positions</field>
@@ -89,7 +88,7 @@
             </tree>
         </field>
     </record>
--->
+
 
     <!-- SMTP -->
     <record id="gpsmap_mail_alert" model="ir.mail_server"> 
