@@ -74,7 +74,7 @@ class tc_devices(models.Model):
     signal                                      = fields.Boolean('Good signal', default=True)
     company_ids                                 = fields.Many2many('res.company', 'tcdevices_res_company_rel', 'user_id', 'cid', string='Companies', default=lambda self: self.env.user.company_id)
     
-    """
+    
 class tc_positions(models.Model):
     _name = "tc_positions"
     _description = 'traccar positions'
@@ -95,7 +95,7 @@ class tc_positions(models.Model):
     attributes                                  = fields.Char('Atributos', size=5000)
     status                                      = fields.Char('Type', size=5000)
 
-    """
+    
 class vehicle(models.Model):
     _inherit = "fleet.vehicle"
     image_vehicle = fields.Selection([
