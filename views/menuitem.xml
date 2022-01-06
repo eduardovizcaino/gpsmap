@@ -29,13 +29,13 @@
     </record>
     <menuitem id="menu_gpsmap_maphistory" sequence="3" name="History Map"  parent="gpsmap_geolocation" action="action_gpsmap_maphistory" groups="gpsmap.gpsmap_group_admin"/>    
 
-
+<!--
     <record id='fleet_tc_positions_action' model='ir.actions.act_window'>
         <field name="name">GPS Positions</field>
         <field name="res_model">tc_positions</field>
     </record>
     <menuitem action="fleet_tc_positions_action" parent="gpsmap_geolocation" id="fleet_tc_positions_menu" sequence="1" groups="gpsmap.gpsmap_group_admin"/>
-
+-->
     <!--
     <record id='fleet_position_action' model='ir.actions.act_window'>
         <field name="name">History Events</field>
