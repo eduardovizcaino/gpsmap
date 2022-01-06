@@ -84,7 +84,7 @@ class tc_positions(models.Model):
     servertime                                  = fields.Datetime('Server Time')
     devicetime                                  = fields.Datetime('Device Time')
     fixtime                                     = fields.Datetime('Error Time')
-    valid                                       = fields.Integer('Valido')
+    #valid                                       = fields.Integer('Valido')
     latitude                                    = fields.Float('Latitud',digits=(5,10))
     longitude                                   = fields.Float('Longitud',digits=(5,10))
     altitude                                    = fields.Float('Altura',digits=(6,2))
@@ -174,21 +174,21 @@ class vehicle(models.Model):
         return self.js_positions_online()
     @api.model    
     def js_positions_online(self):
-        print("GEOCENFES IN POSITIONS ######################")        
+        #print("GEOCENFES IN POSITIONS ######################")        
         alerts_obj          =self.env['gpsmap.geofence_device']
         alerts_args         =[]
         alerts              =alerts_obj.search(alerts_args, offset=0, limit=None, order=None)
 
         for alert in alerts:            
-            print("ALERTA ", alert["name"])        
+            #print("ALERTA ", alert["name"])        
             devices         =alert["device_ids"]
             geofences       =alert["geofence_ids"]
             polygons = []
             for geofence in geofences:
                 area        =geofence["area"]                
-                print("GEOFENCE", geofence["name"])
+                #print("GEOFENCE", geofence["name"])
                 str_area    =area[9:len(area)-2]
-                print("AREA2 ", str_area)
+                #print("AREA2 ", str_area)
                 coordinates = str.split(str_area, ', ')
                 polygon = []
                 for coordinate in coordinates:
@@ -216,7 +216,7 @@ class vehicle(models.Model):
         #geofence_ids = fields.Many2many('tc_geofences', 'alert_geofence', 'geofence_id', 'alert_id', string='Geofence')
         #device_ids = fields.Many2many('fleet.vehicle', 'alert_device', 'device_id', 'alert_id', string='Device')            
         
-        print("POSITIONS ######################")
+        #print("POSITIONS ######################")
         
         hoy_fecha                               ="%s" %(datetime.datetime.now())
         hoy                                     =hoy_fecha[0:19]
@@ -251,7 +251,7 @@ class vehicle(models.Model):
         return_positions                    ={}
         positions                           =self.env.cr.dictfetchall()
         for position in positions:
-            print("status==",   position)
+            #print("status==",   position)
             if(position["status"]=="Offline"):
                 print("Fuera de linea")
             else:
