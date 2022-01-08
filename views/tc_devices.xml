@@ -14,8 +14,9 @@
                     <field name="phone"/>
                     <field name="disabled"/>
 
-                    <field name="signal"/>                   
-                </group>                
+                    <field name="signal"/>                                       
+                </group>
+                <field name="company_ids" />                
             </form>
         </field>
     </record>
@@ -31,6 +32,7 @@
                 <field name="phone"/>
                 <field name="disabled"/>
                 <field name="signal"/>
+                <field name="company_ids" />
             </tree>
         </field>
     </record>
