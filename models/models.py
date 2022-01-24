@@ -251,14 +251,14 @@ class vehicle(models.Model):
         return_positions                    ={}
         positions                           =self.env.cr.dictfetchall()
         for position in positions:
-            #print("status==",   position)
+            print("status==",   position)
             if(position["status"]=="Offline"):
                 print("Fuera de linea")
             else:
                 if(float(position["fv_speed"]) < float(position["speed_compu"])):
                     print("Exceso de velocidad")
-                for data_device in data_devices:
-                    print("data_device", data_device)
+                #for data_device in data_devices:
+                #    print("data_device", data_device)
                 
             
             position["de"]            =position["tp_deviceid"]                            
