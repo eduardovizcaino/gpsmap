@@ -72,7 +72,7 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>            
         </record>   
--->
+
 
 
 
@@ -98,7 +98,6 @@
             <field name="perm_unlink" eval="True"/>            
         </record>        
 
-<!--
 
         <record id="rule_gps_alerts_manager" model="ir.rule">
             <field name="name">The manager has all the rights to the mirror</field>

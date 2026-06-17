@@ -1,6 +1,6 @@
 {
     'name' : 'GPSMap - Traccar',
-    'price' : '1000.0',
+    'price' : '189.0',
     'currency' : 'EUR',
     'license' : 'LGPL-3',
     'images': ['static/description/map_online.png'],
@@ -44,15 +44,9 @@ Main features
         'views/fleet_vehicle_odometer.xml',
         'views/fleet_vehicle.xml',
         'views/gps_devices.xml',
-        'views/gps_mirror.xml',
         'views/gps_positions.xml',
         'views/menuitem.xml',
 
-        'views/frontend_mirror_menu.xml',
-        'views/frontend_mirror_odometers.xml',
-        'views/frontend_mirror.xml',
-
-        
         'views/frontend_odometer_batery.xml',
         'views/frontend_odometer_gas.xml',
         'views/frontend_odometer_speed.xml',
@@ -63,20 +57,18 @@ Main features
     'assets': {
         'web.assets_backend': [
             '/gpsmap/static/js/google.js',
-            '/gpsmap/static/js/maplabel.js',
             '/gpsmap/static/js/AbstractAction.js',
             '/gpsmap/static/js/index.js',
-            'gpsmap/static/xml/*.xml',
+            '/gpsmap/static/xml/*.xml',
             '/gpsmap/static/css/index.css',
         ],
         'web.assets_frontend': [            
             '/gpsmap/static/css/index.css',
             '/gpsmap/static/js/google.js',
-            '/gpsmap/static/src/js/controller.js',
         ],
         'web.assets_qweb': [
             '/gpsmap/static/css/index.css',
-            'gpsmap/static/xml/*.xml',
+            '/gpsmap/static/xml/*.xml',
         ],        
     },    
     #'demo': ['data/demo.xml'],

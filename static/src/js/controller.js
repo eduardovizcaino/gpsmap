@@ -90,93 +90,7 @@ publicWidget.registry.gpsmapMirror = publicWidget.Widget.extend({
         var marcador = data["marcador"];
 
 
-        /*
-        if(type  ==  undefined)     type = "icon";
-        else                        type = "marker";
-
-        if(vehicle["st"]  ==  undefined)    vehicle["st"] = "1";
-        if(vehicle["st"]  ==  "")           vehicle["st"] = "1";
-        if(vehicle["mo"]  ==  "map")        vehicle["st"] = "1";
-
-        var coordinates = {latitude: vehicle["lat"], longitude: vehicle["lon"]};
-        var posicion = LatLng(coordinates);
-
-        var icon_status = "";
-
-        if(vehicle["sta"] == "alarm")                                icon_status = "alarm.png";
-        if(vehicle["sta"] == "Online")                            icon_status = "car_signal1.png";
-        if(vehicle["sta"] == "Offline" || vehicle["sta"] == "GPS Offline")
-        {
-            icon_status = "car_signal0.png";
-            if(vehicle["ho"]  ==  1)                                icon_status = "car_signal1.png";
-        }
-        if(vehicle["sta"] ==  "ignitionOn")                        icon_status = "swich_on.png";
-        if(vehicle["sta"] ==  "ignitionOff")                        icon_status = "swich_off.png";
-
-        if(vehicle["psp"]<5 && vehicle["sta"] == "Online")        icon_status = "stop.png";
-        if(vehicle["psp"]>5 && vehicle["sta"] == "Online")        icon_status = "car_signal1.png";
-
-        $("div.vehicle[device_id = " + vehicle["idg"] + "]")
-        .attr("date", vehicle["dat"])
-        .attr("time", vehicle["tim"])
-        .attr("speed", vehicle["psp"])
-        .attr("latitude", vehicle["lat"])
-        .attr("longitude", vehicle["lon"])
-        .attr("position", vehicle["idp"])
-        .attr("distance", vehicle["dto"])
-        ;
-
-        if(icon_status != "")
-        {
-            var img_icon = "<img width = \"20\" title = \""+ vehicle["eve"] +"\" src = \"/gpsmap/static/img/template/"+ icon_status +"\" >";
-            if(vehicle["sta"]  ==  "Offline")
-            {
-                img_icon = "<a href = \"tel:" + vehicle["te"] +"\">"+img_icon +"</a>";
-            }
-            $("div.vehicle[device_id = " + vehicle["idg"] + "] div.event_device").html(img_icon);
-        }
-
-        var icon = undefined;
-        if(type  ==  "icon")
-        {
-            var marcador;
-            if(vehicle["cou"] == undefined)        vehicle["cou"] = 1;
-            if(vehicle["cou"])                   icon = vehicle["cou"];
-
-            if(icon>22 && icon<67)    icon = 45;
-            else if(icon<112)        icon = 90;
-            else if(icon<157)        icon = 135;
-            else if(icon<202)        icon = 180;
-            else if(icon<247)        icon = 225;
-            else if(icon<292)        icon = 270;
-            else if(icon<337)        icon = 315;
-            else                    icon = 0;
-
-            var image = "01";
-            if(!(vehicle["ima"]  ==  undefined || vehicle["ima"]  ==  false))        image = vehicle["ima"];
-
-            icon = "/gpsmap/static/img/vehicles/vehicle_" +image+ "/i"+icon+ ".png";
-        }
-        */    
-        /*
-        if(this.labels[vehicle["idg"]]  ==  undefined)
-        {
-            this.labels[vehicle["idg"]] = new MapLabel({
-                text:             vehicle["eco"],
-                position:         posicion,
-                map:             this.obj_map,
-                fontSize:         14,
-                fontColor:        "#8B0000",
-                align:             "center",
-                strokeWeight:    5,
-            });
-        }
-        this.labels[vehicle["idg"]].set('position', posicion);
-        */
-        /*
-        var marcador = markerMap(this.obj_map, posicion, icon);
-        this.fn_localizaciones(marcador, vehicle);
-        */
+       fn_localizaciones(marcador, vehicle);
     },
     status_device: function(obj)
     {
@@ -230,37 +144,11 @@ publicWidget.registry.gpsmapMirror = publicWidget.Widget.extend({
     },       
     del_locations: function ()
     {
-        var idvehicle;
-        var iposiciones;
-        if(_.size(this.localizaciones)>0)
-        {
-            for(idvehicle in this.localizaciones)
-            {
-                var positions_vehicle = this.localizaciones[idvehicle];
-                if(positions_vehicle.length > 0)
-                {
-                    for(iposiciones in positions_vehicle)
-                    {
-                        //this.localizaciones[idvehicle][iposiciones].setVisible(false);
-                        this.localizaciones[idvehicle][iposiciones].setMap(null);
-                    }
-                }
-            }
-        }
+        fn_del_locations();
     },   
     fn_localizaciones: function(position, vehiculo)
     {
-        var ivehiculo = vehiculo["idv"];
-        if(this.localizaciones[ivehiculo]  ==  undefined)
-        {
-            this.localizaciones[ivehiculo] = Array(position);
-            if(vehiculo["se"] != "simulator")        this.vehicle_data[ivehiculo] = Array(vehiculo)
-        }
-        else
-        {
-            this.localizaciones[ivehiculo].unshift(position);
-            if(vehiculo["se"] != "simulator")     this.vehicle_data[ivehiculo].unshift(vehiculo)
-        }
+        fn_localizaciones();    
     },     
 });
 

@@ -87,13 +87,7 @@ class gps_positions(models.Model):
         elif("motion" in json_vals and json_vals["motion"] and float(gps_position["speed"])>2):
             data = "Moving"
         return data
-        
-    """
-    def local_timezone(self, time, tz):
-        time_utf =  datetime.datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
-        time_zone = time_utf.replace(tzinfo=pytz.utc)
-        return time_zone.astimezone(pytz.timezone(tz)).strftime("%Y-%m-%d %H:%M:%S")
-    """
+
     def get_event_speeding(self, vals,gps_position, fleet):
         vals["speeding"] = False
 
@@ -139,7 +133,7 @@ class gps_positions(models.Model):
         return data
 
     def last_positions(self):
-        host, session = self.env['res.config.settings'].sudo()._get_session_information()
+        host, session = self.env['gpsmap'].sudo()._get_session_information()
         try:
             to_time = fields.Datetime.now()
             params = {
@@ -277,7 +271,6 @@ class gps_positions(models.Model):
 
                 position = self.js_positions(vehicle, pos)
 
-
                 #if(not positions):
                 #    positions = {}
                 if(vehicle.gps1_id.id not in positions and vehicle.gps1_id.id>0): 
@@ -288,7 +281,6 @@ class gps_positions(models.Model):
         except re.error:
             raise UserError(_('Error in the filter'))
 
-
     def js_positions(self, vehicle, pos):                    
 
         devicetime = fields.Datetime.context_timestamp(self, pos.devicetime)
@@ -296,6 +288,7 @@ class gps_positions(models.Model):
 
         return {
             "idv": vehicle.id,
+            "idp": pos.id,
             "idg": vehicle.gps1_id.id,
             "nam": vehicle.name,
             "eco": vehicle.economic_number,

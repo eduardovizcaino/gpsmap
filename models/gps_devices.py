@@ -36,11 +36,11 @@ class gps_devices(models.Model):
         params = self.env['ir.config_parameter'].sudo()
         sync_devices = params.get_param('gpsmap.sync_devices')
 
-        sync_devices = False
+        #sync_devices = False
         if(not sync_devices):
             return vals
 
-        host, session = self.env['res.config.settings'].sudo()._get_session_information()
+        host, session = self.env['gpsmap'].sudo()._get_session_information()
         url = f"{host}/devices"
 
         headers = {
@@ -82,7 +82,6 @@ class gps_devices(models.Model):
                     json=data,
                     headers=headers                    
                 )
-                print
                 if response.status_code not in (200, 204):
                     raise UserError(f"Error actualizando Traccar: {response.text}")
             else:       

@@ -11,6 +11,7 @@
                         <field name="model"/>
                         <field name="phone"/>
                         <field name="port"/>
+                        <field name="protocolid" />
                     </group>
                     <field name="commands"/>
                 </sheet>

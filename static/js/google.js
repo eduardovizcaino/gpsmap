@@ -1,7 +1,7 @@
 var localizaciones = new Array();
 var vehicle_data = new Array();
-
-
+var simulation_action = "stop";
+var isimulacion = 1;
 
 async function create_map(self)
 {    
@@ -50,7 +50,6 @@ function markerMap(map, position, vehicle, markerOptions)
 
     markerOptions.position = position;
     markerOptions.map = map;
-
     
     if(vehicle != undefined)
     {
@@ -93,12 +92,17 @@ function markerMap(map, position, vehicle, markerOptions)
         if(vehicle["ima"]=="backhoe")
             img_vehicle = backhoe;
 
-        
+        var red_superior = Math.ceil(vehicle["cou"] / 10) * 10;
+        var red_inferior = Math.floor(vehicle["cou"] / 10) * 10;
+
+        var frame = (red_superior + red_inferior) / 2;
+
+
         svgIcon.innerHTML = `
             <div style="position:absolute; transform:translate(-50%, -50%);">            
             <svg width="100" height="100" viewBox="0 0 600 600"
                 xmlns="http://www.w3.org/2000/svg">
-                <g transform="rotate(`+ vehicle["cou"] +` 300 300)">
+                <g transform="rotate(`+ frame +` 300 300)">
                     `+ img_vehicle +`
                 </g>
                 <text
@@ -129,27 +133,24 @@ function LatLng(co)
 {
     return new google.maps.LatLng(co.latitude,co.longitude);
 }  
-function del_locations(obj_loc)
+
+
+function positions_paint()
 {
-    var idvehicle;
-    var iposiciones;
-    if(_.size(obj_loc.localizaciones)>0)
+    var iposition;
+    var ivehicle;
+    if(_.size(this.data_positions)>0)
     {
-        for(idvehicle in obj_loc.localizaciones)
+        for(ivehicle in this.data_positions)
         {
-            var positions_vehicle = obj_loc.localizaciones[idvehicle];
-            if(positions_vehicle.length > 0)
+            var vehicle_positions = this.data_positions[ivehicle];
+            for(iposition in vehicle_positions)
             {
-                for(iposiciones in positions_vehicle)
-                {
-                    //obj_loc.localizaciones[idvehicle][iposiciones].setVisible(false);
-                    //obj_loc.localizaciones[idvehicle][iposiciones].setVisible(false);
-                    obj_loc.localizaciones[idvehicle][iposiciones].setMap(null);
-                }
+                var position = vehicle_positions[iposition];
+                this.locationsMap(position)
             }
         }
     }
-    return obj_loc;
 }
 
 
@@ -213,6 +214,7 @@ function locationsMap(object, vehicle, type)
     if(device_active  ==  vehicle["idg"] && vehicle["se"]  ==  undefined || vehicle["se"]  ==  "simulator")
     {
     
+        
         obj_map.panTo(posicion);
 
         //this.centerMap(posicion);
@@ -248,6 +250,7 @@ function func_odometer_batery(data)
 }
 function func_odometer(item)
 {
+    
     func_odometer_speed(item["psp"]);
     func_odometer_gas(item["gas"]);
     func_odometer_batery(item["bat"]);
@@ -287,5 +290,25 @@ function fn_localizaciones(position, vehiculo)
     {
         localizaciones[ivehiculo].unshift(position);
         if(vehiculo["se"] != "simulator")     vehicle_data[ivehiculo].unshift(vehiculo);
+    }
+}
+
+function fn_del_locations()
+{    
+    var idvehicle;
+    var iposiciones;
+    if(localizaciones.length>0)
+    {
+        for(idvehicle in localizaciones)
+        {
+            var positions_vehicle = localizaciones[idvehicle];
+            if(positions_vehicle.length > 0)
+            {
+                for(iposiciones in positions_vehicle)
+                {
+                    localizaciones[idvehicle][iposiciones].setMap(null);
+                }
+            }
+        }
     }
 }
