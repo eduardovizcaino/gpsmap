@@ -7,6 +7,7 @@ import re
 
 class gpsmap(models.Model):
     _name = "gpsmap"
+    _description = 'Conection with server'
 
     def _get_session_information(self):
         host = self.env['ir.config_parameter'].sudo().get_param('gpsmap.host')

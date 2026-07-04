@@ -1,6 +1,6 @@
 <odoo>
-    <menuitem name="GPS" parent="fleet.menu_root" id="gpsmap_geolocation" groups="fleet.fleet_group_user" />
-    <menuitem name="GPS" parent="fleet.fleet_configuration" id="gpsmap_configuration" sequence="2" groups="fleet.fleet_group_user"/>
+    <menuitem name="Geolocation" parent="fleet.menu_root" id="gpsmap_geolocation" groups="fleet.fleet_group_user" />
+    <menuitem name="Geolocation" parent="fleet.fleet_configuration" id="gpsmap_configuration" sequence="2" groups="fleet.fleet_group_user"/>
     <menuitem name="GPS" parent="fleet.menu_fleet_reporting" id="gpsmap_report" sequence="2" groups="fleet.fleet_group_user"/>
     
     <menuitem name="Configuration" parent="fleet.menu_root" id="fleet.fleet_configuration" sequence="100" groups="fleet.fleet_group_user"/>
@@ -14,27 +14,13 @@
     </record>
     <menuitem id="menu_gpsmap_maponline" name="Online Map" sequence="1" parent="gpsmap_geolocation" action="action_gpsmap_maponline" groups="fleet.fleet_group_user"/>
 
-<!--
-    <record id="action_gpsmap_street" model="ir.actions.client">
-        <field name="name">Street Online</field>
-        <field name="tag">gpsmap.streetonline</field>
-    </record>
-    <menuitem id="menu_gpsmap_streetonline" sequence="2" name="Online Street"  parent="gpsmap_geolocation" action="action_gpsmap_street" groups="fleet.fleet_group_user"/>    
--->
-
     <record id='fleet_gps_devices_action' model='ir.actions.act_window'>
-        <field name="name">Devices</field>
+        <field name="name">GPS Devices</field>
         <field name="res_model">gps_devices</field>
     </record>
     <menuitem action="fleet_gps_devices_action" parent="gpsmap_configuration" id="fleet_gps_devices_menu" groups="fleet.fleet_group_manager"/>
 
 <!--
-    <record id="action_gpsmap_maphistory" model="ir.actions.client">
-        <field name="name">History Map</field>
-        <field name="tag">gpsmap.maphistory</field>
-    </record>
-    <menuitem id="menu_gpsmap_maphistory" sequence="3" name="History Map"  parent="gpsmap_geolocation" action="action_gpsmap_maphistory" groups="fleet.fleet_group_user"/>    
-
 
     <record id='gps_commands_action' model='ir.actions.act_window'>
         <field name="name">Commands</field>
@@ -112,10 +98,5 @@
     <menuitem action="gps_alerts_action" parent="gpsmap_configuration" id="gps_alerts_menu"  groups="fleet.fleet_group_manager"/>
     
 
-    <record id='gps_mirror_action' model='ir.actions.act_window'>
-        <field name="name">Mirror</field>
-        <field name="res_model">gps_mirror</field>
-    </record>
-    <menuitem action="gps_mirror_action" parent="gpsmap_configuration" id="gps_mirror_menu" groups="fleet.fleet_group_user"/>
 -->
 </odoo>
