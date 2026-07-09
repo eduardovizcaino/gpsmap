@@ -150,7 +150,11 @@ odoo.define('gpsmap.action', function (require) {
                 this.positions_search(argument);
             if(typeof argument != "number")
             {
-                setTimeout(() => {
+
+                if (this._positionTimer) {
+                    clearTimeout(this._positionTimer);
+                }
+                this._positionTimer = setTimeout(() => {
                     this.positions(argument);
                 },this.time);
             }
@@ -289,7 +293,8 @@ odoo.define('gpsmap.action', function (require) {
         start: function() {
             var data = this._super.apply(this, arguments);
             this._initMap();
-            this.positions();
+            if(this.time  ==  undefined)
+                this.positions();
             return data;
         },
         _initMap: function(idmap) {

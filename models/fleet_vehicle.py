@@ -51,7 +51,7 @@ class vehicle(models.Model):
 
                 if(pos.devicetime < time_before):
                     status = "Offline"
-
+                    pos.status="Offline"
             position = pos.js_positions(vehicle, pos)
             if(pos.deviceid.id>0):
                 positions[pos.deviceid.id] = {0: position}
