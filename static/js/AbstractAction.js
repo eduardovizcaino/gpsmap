@@ -159,6 +159,13 @@ odoo.define('gpsmap.action', function (require) {
                 },this.time);
             }
         },
+
+        destroy: function () {
+            if (this._positionTimer) {
+                clearInterval(this._positionTimer);
+            }
+            this._super.apply(this, arguments);
+        },
         ////////////////////////////////////////////////
         positions_search:function(argument){
             var model;            

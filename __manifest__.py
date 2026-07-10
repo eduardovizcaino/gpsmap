@@ -10,22 +10,9 @@
     "version": "16.0.0.0.0",
     'website' : 'https://solesgps.com',
     'summary' : 'Locate the satellite coordinates that your GPS devices throw. Save that information here and see it on the map.',
-    'description' : """
-GPS DEVICES
-=====================================
-With this module, we will help you to manage your GPS devices, with which you will be able to see the vehicles of your fleet on a map.
-
-Main features
--------------
-* Add GPS devices and relate them to the vehicles.
-* Geolocate your vehicles on the map, minute by minute.
-* Make a simulation of the geolocation history.
-* Generates reports with speed, fuel, mileage.
-""",
     'depends': [
         'base_geolocalize',
         'fleet',
-        #'website'
     ],
     'data': [
         # DATA
